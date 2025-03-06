@@ -1,13 +1,5 @@
 # synerdo-api
 
-## `.env` file
-```
-DJANGO_DEBUG=True
-DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1
-DJANGO_SECRET_KEY=None
-```
-
-
 ## Start project with Docker compose
 
 ```bash
@@ -18,28 +10,14 @@ docker compose up --build -d
 docker compose exec api bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py createsuperuser"
 ```
 
-## Start project with Docker
-
-```bash
-docker build -t synerdo-api .
-```
-
-```bash
-docker run --env-file .env -p 8000:8000 -d IMAGE
-```
-
-### Admin panel test
-
-```bash
-docker exec -it CONTAINER_ID python manage.py migrate
-```
-
-```bash
-docker exec -it CONTAINER_ID python manage.py createsuperuser
-```
-
 
 ## Start project local
+
+### Launch database
+```bash
+docker compose -f db_compose.yml up -d
+```
+In `.env` file set DATABASE_HOST=localhost
 
 ### Set environment and install dependencies
 ```bash
@@ -47,11 +25,7 @@ python -m venv venv
 ```
 
 ```bash
-source venv/bin/activate            # Linux
-```
-
-```bash
-.\venv\Scripts\activate             # Windows
+source venv/bin/activate
 ```
 
 ```bash
