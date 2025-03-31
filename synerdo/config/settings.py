@@ -43,13 +43,14 @@ INSTALLED_APPS = [
     'rest_framework',
     'users',
     'corsheaders',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -137,7 +138,8 @@ REST_FRAMEWORK = {
     ),
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 SIMPLE_JWT = {
@@ -149,3 +151,10 @@ SIMPLE_JWT = {
 CORS_ALLOWED_ORIGINS = [
     f"http://{os.getenv('UI_HOST')}:{os.getenv('UI_PORT')}",
 ]
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Synerdo API',
+    #'DESCRIPTION': 'Your project description',
+    'VERSION': '0.1.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+}
