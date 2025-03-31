@@ -7,7 +7,7 @@ docker compose up --build -d
 ```
 
 ```bash
-docker compose exec api bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py createsuperuser"
+docker compose exec api bash -c "python manage.py migrate"
 ```
 
 
@@ -39,19 +39,11 @@ cd synerdo/
 ```
 
 ```bash
-./manage.py runserver
-```
-Starting development server at http://127.0.0.1:8000/
-
-
-### Admin panel test
-
-```bash
 ./manage.py migrate
 ```
 
 ```bash
-./manage.py createsuperuser
+./manage.py runserver
 ```
 
-login and test at http://127.0.0.1:8000/admin/
+Starting development server at http://127.0.0.1:8000/
