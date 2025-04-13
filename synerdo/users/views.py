@@ -2,7 +2,6 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from .serializers import RegisterSerializer
 from rest_framework.permissions import AllowAny
-from rest_framework.views import APIView
 
 
 class RegisterView(generics.GenericAPIView):
@@ -16,9 +15,3 @@ class RegisterView(generics.GenericAPIView):
         user_data = serializer.data
 
         return Response(user_data, status=status.HTTP_201_CREATED)
-
-
-class AccessTest(APIView):
-    def get(self, request):
-        return Response({"message": "authorized"})
-
