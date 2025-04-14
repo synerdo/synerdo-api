@@ -6,8 +6,9 @@
 docker compose up --build -d
 ```
 
+To view the logs, run:
 ```bash
-docker compose exec api bash -c "python manage.py migrate"
+docker compose exec api tail -f django.log
 ```
 
 
