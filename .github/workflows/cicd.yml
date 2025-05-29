@@ -1,0 +1,50 @@
+name: API CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Run CI/CD
+    runs-on: ubuntu-22.04
+    env:
+      DOCKER_API_TAG: ${{ github.sha }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build and tag image
+        run: |
+          docker build -t synerdo-api ./
+          docker tag synerdo-api "${{ secrets.DOCKER_API_REPOSITORY }}:${{ env.DOCKER_API_TAG }}"
+
+      - name: Push image to dockerhub
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker push "${{ secrets.DOCKER_API_REPOSITORY }}:${{ env.DOCKER_API_TAG }}"
+
+      - name: SSH into server
+        uses: appleboy/ssh-action@master
+        with:
+          username: ${{ secrets.SERVER_USERNAME }}
+          host: ${{ secrets.SERVER_HOST }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          script: |
+            echo "Exporting necessary secrets..."
+            export DOCKER_API_REPOSITORY=${{ secrets.DOCKER_API_REPOSITORY }}
+            export DOCKER_API_TAG=${{ env.DOCKER_API_TAG }}
+
+            echo "Logging in to dockerhub..."
+            echo ${{ secrets.DOCKER_PASSWORD }} | docker login --username ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+            echo "Entering synerdo project folder..."
+            cd synerdo
+
+            echo "Running docker compose..."
+            docker compose --env-file ./.env up --build synerdo-db synerdo-api -d
+
+            echo "Removing unused images..."
+            docker image prune -fa
