@@ -155,8 +155,7 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOWED_ORIGINS = [
-    os.getenv("DEV_ORIGIN"),
-    os.getenv("PROD_ORIGIN"),
+    f"{os.getenv('UI_SCHEME')}://{os.getenv('UI_HOST')}:{os.getenv('UI_PORT')}",
 ]
 
 SPECTACULAR_SETTINGS = {
