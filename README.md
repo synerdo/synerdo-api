@@ -10,7 +10,9 @@ To view the logs, run:
 ```bash
 docker compose exec api tail -f django.log
 ```
-
+```bash
+docker-compose logs api
+```
 
 ## Start project local
 
